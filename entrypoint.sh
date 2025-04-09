@@ -26,5 +26,11 @@ php artisan cache:clear
 php artisan route:clear
 php artisan view:clear
 
+# Donner les bonnes permissions si nécessaire
+chown -R www-data:www-data /var/www/wave/storage
+chmod -R 775 /var/www/wave/storage
+chown www-data:www-data /var/www/wave/storage/logs/laravel.log
+chmod 664 /var/www/wave/storage/logs/laravel.log
+
 # Lancer le service PHP-FPM
 exec php-fpm
