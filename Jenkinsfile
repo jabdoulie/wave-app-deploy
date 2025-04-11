@@ -8,5 +8,19 @@ pipeline {
                 checkout scm  // Utilisation du SCM configuré dans Jenkins
             }
         }
+
+        stage('Install Backend Dependencies') {
+            steps {
+                echo 'Installation des dépendances PHP via Composer'
+                sh 'composer install --no-interaction --prefer-dist'
+            }
+        }
+
+        stage('Install Frontend Dependencies') {
+            steps {
+                echo 'Installation des dépendances JavaScript via npm'
+                sh 'npm install'
+            }
+        }
     }
 }
