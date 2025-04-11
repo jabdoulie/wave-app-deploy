@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     echo 'Analyse du code avec SonarQube'
-                    withSonarQubeEnv('SonarQube') {
+                    withSonarQubeEnv('sonarqube') {
                         // Assurez-vous d’avoir un projet Maven/Gradle ou un script adapté
                         sh '''
                             sonar-scanner \
