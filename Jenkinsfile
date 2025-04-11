@@ -78,6 +78,9 @@ pipeline {
         script {
             echo 'Déploiement dans Kubernetes à partir des fichiers YAML existants'
             // installer microk8s
+
+            // Applique les PVC
+            sh '/snap/bin/microk8s.kubectl apply -f pvc.yml'
             // Applique le Deployment
             sh '/snap/bin/microk8s.kubectl apply -f deployment.yml'
 
