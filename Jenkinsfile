@@ -73,5 +73,20 @@ pipeline {
                 }
             }
         }*/
+    stage('Deploy to Kubernetes') {
+    steps {
+        script {
+            echo 'Déploiement dans Kubernetes à partir des fichiers YAML existants'
+
+            // Applique le Deployment
+            sh 'kubectl apply -f k8s/deployment.yaml'
+
+            // Applique le Service
+            sh 'kubectl apply -f k8s/service.yaml'
+            
+                }
+            }
+        }
+    
     }
 }
