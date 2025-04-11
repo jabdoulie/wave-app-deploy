@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SONAR_CREDENTIALS_ID = 'Sonar-token'
-        SONARQUBE_URL = 'http://http://192.168.8.14:9000'  // URL de SonarQube
+        SONARQUBE_URL = 'http://192.168.8.14:9000'  // URL de SonarQube
         DOCKER_IMAGE = 'abdoulie/wave-image'  // Nom de l'image Docker sur Docker Hub
         DOCKER_TAG = 'latest'  // Tag de l'image (peut être dynamique)
         DOCKER_CREDENTIALS = 'docker-hub-credentials'  // Credentials Docker Hub configuré dans Jenkins
@@ -41,7 +41,8 @@ pipeline {
                     }
                 }
             }
-        
+        }
+
         // Ajouter l'étape SonarQube Scan ici
         stage('SonarQube Analysis') {
             steps {
@@ -50,8 +51,9 @@ pipeline {
                     withSonarQubeEnv('SonarQube') {
                         // Assurez-vous d’avoir un projet Maven/Gradle ou un script adapté
                         sh '''
-                            -Dsonar.projectKey=wave-project 
-                            -Dsonar.host.url=$SONARQUBE_URL 
+                            sonar-scanner \
+                            -Dsonar.projectKey=wave-project \
+                            -Dsonar.host.url=$SONARQUBE_URL \
                             -Dsonar.login=$SONARQUBE_TOKEN
                         '''
                     }
@@ -70,7 +72,5 @@ pipeline {
                 }
             }
         }
-    }
-    
     }
 }
