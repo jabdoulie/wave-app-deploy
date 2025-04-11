@@ -2,6 +2,7 @@ pipeline {
     agent any  // Utilise n'importe quel agent disponible
 
     environment {
+        SCANNER_HOME = tool 'sonar-scanner'
         SONAR_CREDENTIALS_ID = 'Sonar-token'
         SONARQUBE_URL = 'http://192.168.8.14:9000'  // URL de SonarQube
         DOCKER_IMAGE = 'abdoulie/wave-image'  // Nom de l'image Docker sur Docker Hub
@@ -52,6 +53,7 @@ pipeline {
                         // Assurez-vous d’avoir un projet Maven/Gradle ou un script adapté
                         sh '''
                             sonar-scanner \
+                            -$SCANNER_HOME/bin/sonar-scanner \
                             -Dsonar.projectKey=wave-project \
                             -Dsonar.host.url=$SONARQUBE_URL \
                             -Dsonar.login=$SONARQUBE_TOKEN
