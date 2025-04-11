@@ -1,8 +1,8 @@
 pipeline {
-    agent any
+    agent any  // Utilise n'importe quel agent disponible
 
     environment {
-        DOCKER_IMAGE = 'ton-utilisateur/ton-image'  // Nom de l'image Docker sur Docker Hub
+        DOCKER_IMAGE = 'wave-image'  // Nom de l'image Docker sur Docker Hub
         DOCKER_TAG = 'latest'  // Tag de l'image (peut être dynamique)
         DOCKER_CREDENTIALS = 'docker-hub-credentials'  // Credentials Docker Hub configuré dans Jenkins
     }
@@ -15,31 +15,28 @@ pipeline {
             }
         }
 
-        stage('Install Backend Dependencies') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Installation des dépendances PHP via Composer'
-                sh 'composer install --no-interaction --prefer-dist'
+                script {
+                    echo 'Construction de l\'image Docker'
+                    sh '''
+                        docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
+                    '''
+                }
             }
         }
 
-        stage('Install Frontend Dependencies') {
+        stage('Push Docker Image to Docker Hub') {
             steps {
-                echo 'Installation des dépendances JavaScript via npm'
-                sh 'npm install'
-            }
-        }
-
-        stage('Build Frontend') {
-            steps {
-                echo 'Compilation du frontend avec npm run build'
-                sh 'npm run build'
-            }
-        }
-
-        stage('Run Backend Tests') {
-            steps {
-                echo 'Exécution des tests backend avec PHPUnit'
-                sh 'php artisan test'
+                script {
+                    echo 'Push de l\'image Docker vers Docker Hub'
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh '''
+                            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                            docker push $DOCKER_IMAGE:$DOCKER_TAG
+                        '''
+                    }
+                }
             }
         }
     }
