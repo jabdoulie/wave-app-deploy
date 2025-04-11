@@ -82,7 +82,7 @@ pipeline {
             sh '/snap/bin/microk8s.kubectl apply -f k8s/deployment.yaml'
 
             // Applique le Service
-            sh 'kubectl apply -f k8s/service.yaml'
+            sh '/snap/bin/microk8s.kubectl apply -f k8s/service.yaml'
 
                 }
             }
