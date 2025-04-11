@@ -36,7 +36,7 @@ spec:
             claimName: wave-cache-pvc
         - name: wave-app-dir
           hostPath:
-            path: /path/to/your/app  # Remplace cela par le bon chemin local ou le chemin sur le volume du serveur
+            path: .  # Remplace cela par le bon chemin local ou le chemin sur le volume du serveur
 
 ---
 apiVersion: apps/v1
@@ -128,4 +128,4 @@ spec:
             claimName: wave-cache-pvc
         - name: wave-app-dir
           hostPath:
-            path: /path/to/your/app
+            path: .
