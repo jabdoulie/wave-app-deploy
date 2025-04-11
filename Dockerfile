@@ -53,6 +53,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer install --no-interaction --prefer-dist
 RUN chmod -R 777 storage bootstrap/cache
 
+COPY .env.example .env
+
 # Ajouter un fichier de configuration pour augmenter la mémoire PHP
 RUN echo "memory_limit = 512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 
@@ -77,7 +79,6 @@ RUN chmod -R 775 /var/www/wave/storage
 RUN chmod -R 775 /var/www/wave/bootstrap/cache
 
 # Configurer l'environnement
-#COPY .env.example .env
 RUN php artisan key:generate
 
 # Copier le fichier entrypoint.sh dans l'image Docker et le rendre exécutable
