@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wave-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wave-app
+  template:
+    metadata:
+      labels:
+        app: wave-app
+    spec:
+      containers:
+        - name: wave-app
+          image: wave-image
+          workingDir: /var/www/wave
+          command: ["/bin/sh", "-c", "npm run build"]
+          envFrom:
+            - configMapRef:
+                name: wave-env
+          volumeMounts:
+            - name: wave-storage
+              mountPath: /var/www/wave/storage
+            - name: wave-cache
+              mountPath: /var/www/wave/bootstrap/cache
+            - name: wave-app-dir
+              mountPath: /var/www/wave
+      volumes:
+        - name: wave-storage
+          persistentVolumeClaim:
+            claimName: wave-storage-pvc
+        - name: wave-cache
+          persistentVolumeClaim:
+            claimName: wave-cache-pvc
+        - name: wave-app-dir
+          hostPath:
+            path: /path/to/your/app  # Remplace cela par le bon chemin local ou le chemin sur le volume du serveur
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wave-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wave-db
+  template:
+    metadata:
+      labels:
+        app: wave-db
+    spec:
+      containers:
+        - name: wave-db
+          image: mariadb:latest
+          envFrom:
+            - configMapRef:
+                name: wave-env
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-data-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wave-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wave-redis
+  template:
+    metadata:
+      labels:
+        app: wave-redis
+    spec:
+      containers:
+        - name: wave-redis
+          image: redis:latest
+          ports:
+            - containerPort: 6379
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wave-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wave-nginx
+  template:
+    metadata:
+      labels:
+        app: wave-nginx
+    spec:
+      containers:
+        - name: wave-nginx
+          image: nginx:latest
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: wave-storage
+              mountPath: /var/www/wave/storage
+            - name: wave-cache
+              mountPath: /var/www/wave/bootstrap/cache
+            - name: wave-app-dir
+              mountPath: /var/www/wave
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: wave-nginx-config
+        - name: wave-storage
+          persistentVolumeClaim:
+            claimName: wave-storage-pvc
+        - name: wave-cache
+          persistentVolumeClaim:
+            claimName: wave-cache-pvc
+        - name: wave-app-dir
+          hostPath:
+            path: /path/to/your/app

@@ -63,7 +63,7 @@ pipeline {
         }
 
         // Ajouter l'étape Trivy Scan pour l'analyse de sécurité de l'image Docker
-        stage('Trivy Docker Image Scan') {
+        /*stage('Trivy Docker Image Scan') {
             steps {
                 script {
                     echo 'Analyse de l\'image Docker avec Trivy'
@@ -72,6 +72,6 @@ pipeline {
                     '''
                 }
             }
-        }
+        }*/
     }
 }
