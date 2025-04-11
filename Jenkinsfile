@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        /*stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Construction de l\'image Docker'
@@ -83,7 +83,7 @@ pipeline {
 
             // Applique le Service
             sh 'kubectl apply -f k8s/service.yaml'
-            
+
                 }
             }
         }
