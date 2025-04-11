@@ -8,6 +8,20 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  storageClassName: standard  # Added storageClassName to specify the storage class
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wave-cache-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard  # Added storageClassName to specify the storage class
 
 ---
 apiVersion: v1
@@ -20,15 +34,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: wave-cache-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 500Mi
+  storageClassName: standard  # Added storageClassName to specify the storage class
