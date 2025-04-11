@@ -79,10 +79,10 @@ pipeline {
             echo 'Déploiement dans Kubernetes à partir des fichiers YAML existants'
             // installer microk8s
             // Applique le Deployment
-            sh 'microk8s kubectl apply -f k8s/deployment.yaml'
+            sh 'kubectl apply -f k8s/deployment.yaml'
 
             // Applique le Service
-            sh 'microk8s kubectl apply -f k8s/service.yaml'
+            sh 'kubectl apply -f k8s/service.yaml'
 
                 }
             }
