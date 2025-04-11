@@ -2,7 +2,7 @@ pipeline {
     agent any  // Utilise n'importe quel agent disponible
 
     environment {
-        DOCKER_IMAGE = 'wave-image'  // Nom de l'image Docker sur Docker Hub
+        DOCKER_IMAGE = 'abdoulie/wave-image'  // Nom de l'image Docker sur Docker Hub
         DOCKER_TAG = 'latest'  // Tag de l'image (peut être dynamique)
         DOCKER_CREDENTIALS = 'docker-hub-credentials'  // Credentials Docker Hub configuré dans Jenkins
     }
