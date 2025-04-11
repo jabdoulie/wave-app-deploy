@@ -52,8 +52,7 @@ pipeline {
                     withSonarQubeEnv('sonarqube') {
                         // Assurez-vous d’avoir un projet Maven/Gradle ou un script adapté
                         sh '''
-                            sonar-scanner \
-                            -$SCANNER_HOME/bin/sonar-scanner \
+                            $SCANNER_HOME/bin/sonar-scanner \
                             -Dsonar.projectKey=wave-project \
                             -Dsonar.host.url=$SONARQUBE_URL \
                             -Dsonar.login=$SONARQUBE_TOKEN
