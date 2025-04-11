@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        /*stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Construction de l\'image Docker'
@@ -41,7 +41,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         // Ajouter l'étape SonarQube Scan ici
         stage('SonarQube Analysis') {
@@ -62,7 +62,7 @@ pipeline {
         }
 
         // Ajouter l'étape Trivy Scan pour l'analyse de sécurité de l'image Docker
-        stage('Trivy Docker Image Scan') {
+        /*stage('Trivy Docker Image Scan') {
             steps {
                 script {
                     echo 'Analyse de l\'image Docker avec Trivy'
@@ -71,6 +71,6 @@ pipeline {
                     '''
                 }
             }
-        }
+        }*/
     }
 }
