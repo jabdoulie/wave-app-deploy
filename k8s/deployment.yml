@@ -15,7 +15,6 @@ spec:
       containers:
         - name: wave-app
           image: abdoulie/wave-image:latest
-          imagePullPolicy: IfNotPresent
           workingDir: /var/www/wave
           envFrom:
             - configMapRef:
@@ -78,7 +77,7 @@ spec:
       volumes:
         - name: db-data
           persistentVolumeClaim:
-            claimName: db-data-pvc  # Assure-toi que tu aies une PVC qui pointe vers cette donnée
+            claimName: db-data-pvc  
 
 
 ---
