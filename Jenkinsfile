@@ -77,15 +77,20 @@ pipeline {
     steps {
         script {
             echo 'Déploiement dans Kubernetes à partir des fichiers YAML existants'
-            // installer microk8s
+            // Applique wave-env 
+            sh '/snap/bin/microk8s.kubectl apply -f k8s/wave-env.yml'
 
+            // Applique wave-env
+            sh '/snap/bin/microk8s.kubectl apply -f k8s/wave-nginx-config.yml'
+                        
             // Applique les PVC
-            sh '/snap/bin/microk8s.kubectl apply -f pvc.yml'
+            sh '/snap/bin/microk8s.kubectl apply -f k8s/pvc.yml'
+            
             // Applique le Deployment
-            sh '/snap/bin/microk8s.kubectl apply -f deployment.yml'
+            sh '/snap/bin/microk8s.kubectl apply -f k8s/deployment.yml'
 
             // Applique le Service
-            sh '/snap/bin/microk8s.kubectl apply -f service.yml'
+            sh '/snap/bin/microk8s.kubectl apply -f k8s/service.yml'
 
                 }
             }
