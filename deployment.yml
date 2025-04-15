@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: wave-app
-          image: wave-image
+          image: abdoulie/wave-image:latest
+          imagePullPolicy: IfNotPresent
           workingDir: /var/www/wave
-          command: ["/bin/sh", "-c", "npm run build"]
           envFrom:
             - configMapRef:
                 name: wave-env
@@ -25,8 +25,6 @@ spec:
               mountPath: /var/www/wave/storage
             - name: wave-cache
               mountPath: /var/www/wave/bootstrap/cache
-            - name: wave-app-dir
-              mountPath: /var/www/wave
       volumes:
         - name: wave-storage
           persistentVolumeClaim:
@@ -34,9 +32,6 @@ spec:
         - name: wave-cache
           persistentVolumeClaim:
             claimName: wave-cache-pvc
-        - name: wave-app-dir
-          hostPath:
-            path: .  # Remplace cela par le bon chemin local ou le chemin sur le volume du serveur
 
 ---
 apiVersion: apps/v1
@@ -55,17 +50,36 @@ spec:
     spec:
       containers:
         - name: wave-db
-          image: mariadb:latest
-          envFrom:
-            - configMapRef:
-                name: wave-env
+          image: mysql:latest  # Utilisation de l'image MySQL officielle
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: wave-env
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: wave-env
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: wave-env
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: wave-env
+                  key: MYSQL_PASSWORD
           volumeMounts:
             - name: db-data
               mountPath: /var/lib/mysql
       volumes:
         - name: db-data
           persistentVolumeClaim:
-            claimName: db-data-pvc
+            claimName: db-data-pvc  # Assure-toi que tu aies une PVC qui pointe vers cette donnée
+
 
 ---
 apiVersion: apps/v1
@@ -106,26 +120,19 @@ spec:
       containers:
         - name: wave-nginx
           image: nginx:latest
+          ports:
+            - containerPort: 80
           volumeMounts:
             - name: nginx-config
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
-            - name: wave-storage
-              mountPath: /var/www/wave/storage
-            - name: wave-cache
-              mountPath: /var/www/wave/bootstrap/cache
             - name: wave-app-dir
               mountPath: /var/www/wave
       volumes:
         - name: nginx-config
           configMap:
             name: wave-nginx-config
-        - name: wave-storage
-          persistentVolumeClaim:
-            claimName: wave-storage-pvc
-        - name: wave-cache
-          persistentVolumeClaim:
-            claimName: wave-cache-pvc
         - name: wave-app-dir
           hostPath:
-            path: .
+            path: /home/abdoulie/wave-app-deploy
+            type: Directory

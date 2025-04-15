@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wave-env
+data:
+  MYSQL_HOST: db
+  MYSQL_ROOT_PASSWORD: wave23
+  MYSQL_DATABASE: wave
+  MYSQL_USER: wave-user
+  MYSQL_PASSWORD: wave23
