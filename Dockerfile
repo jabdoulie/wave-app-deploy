@@ -57,7 +57,7 @@ RUN mkdir -p storage/framework/{cache,sessions,views} \
     && chmod -R 775 storage
 
 
-COPY .env.example .env
+# COPY .env.example .env
 
 # Ajouter un fichier de configuration pour augmenter la mémoire PHP
 RUN echo "memory_limit = 512M" > /usr/local/etc/php/conf.d/memory-limit.ini
