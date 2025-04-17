@@ -52,6 +52,10 @@ COPY ./ . /var/www/wave
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-interaction --prefer-dist
 RUN chmod -R 777 storage bootstrap/cache
+RUN mkdir -p storage/framework/{cache,sessions,views} \
+    && chown -R www-data:www-data storage \
+    && chmod -R 775 storage
+
 
 COPY .env.example .env
 

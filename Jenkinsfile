@@ -56,7 +56,7 @@ pipeline {
                 script {
                     echo 'Analyse du code avec SonarQube'
                     withSonarQubeEnv('sonarqube') {
-                        // Assurez-vous d’avoir un projet Maven/Gradle ou un script adapté
+                        // 
                         sh '''
                             $SCANNER_HOME/bin/sonar-scanner \
                             -Dsonar.projectKey=wave-project \

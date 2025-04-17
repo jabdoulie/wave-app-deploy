@@ -31,6 +31,13 @@ chown -R www-data:www-data /var/www/wave/storage
 chmod -R 775 /var/www/wave/storage
 chown www-data:www-data /var/www/wave/storage/logs/laravel.log
 chmod 664 /var/www/wave/storage/logs/laravel.log
+mkdir -p storage/framework/cache
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/views
+chmod -R 775 storage
+chown -R www-data:www-data storage
+php artisan config:cache
+
 
 # Lancer le service PHP-FPM
 exec php-fpm
