@@ -42,7 +42,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         sh '''
                             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-                            docker tag wave-image:latest docker.io/$DOCKER_USERNAME/wave-image:latest
+                            docker tag $DOCKER_IMAGE:$DOCKER_TAG
                             docker push $DOCKER_IMAGE:$DOCKER_TAG
                         '''
                     }
