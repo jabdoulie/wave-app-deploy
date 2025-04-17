@@ -18,7 +18,13 @@ pipeline {
             }
         }
 
-        /*stage('Build Docker Image') {
+        stage('Trivy FS Scan') {
+            steps {
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+
+        stage('Build Docker Image') {
             steps {
                 script {
                     echo 'Construction de l\'image Docker'
@@ -63,7 +69,7 @@ pipeline {
         }
 
         // Ajouter l'étape Trivy Scan pour l'analyse de sécurité de l'image Docker
-        /*stage('Trivy Docker Image Scan') {
+        stage('Trivy Docker Image Scan') {
             steps {
                 script {
                     echo 'Analyse de l\'image Docker avec Trivy'
@@ -72,7 +78,7 @@ pipeline {
                     '''
                 }
             }
-        }*/
+        }
     stage('Deploy to Kubernetes') {
     steps {
         script {
