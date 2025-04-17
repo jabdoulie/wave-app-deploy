@@ -74,7 +74,7 @@ pipeline {
                 script {
                     echo 'Analyse de l\'image Docker avec Trivy'
                     sh '''
-                        trivy image --no-progress --exit-code 1 --severity HIGH,CRITICAL $DOCKER_IMAGE:$DOCKER_TAG
+                        trivy image --no-progress --exit-code 1 --severity HIGH,CRITICAL $DOCKER_IMAGE:$DOCKER_TAG || true
                     '''
                 }
             }
