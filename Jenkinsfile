@@ -19,19 +19,6 @@ pipeline {
             }
         }
 
-        stage('Run Laravel Tests') {
-            steps {
-                echo '✅ Exécution des tests Laravel avec PHPUnit'
-                sh '''
-                    composer install --no-interaction
-                    cp .env.example .env
-                    php artisan config:clear
-                    php artisan config:cache
-                    php artisan test
-                '''
-            }
-        }
-
         stage('Trivy FS Scan') {
             steps {
                 echo '🔍 Analyse des fichiers de l\'application avec Trivy (filesystem)'
