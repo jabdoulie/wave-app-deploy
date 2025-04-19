@@ -27,7 +27,6 @@ pipeline {
                     cp .env.example .env
                     php artisan config:clear
                     php artisan config:cache
-                    php artisan migrate:fresh --seed --force
                     php artisan test
                 '''
             }
