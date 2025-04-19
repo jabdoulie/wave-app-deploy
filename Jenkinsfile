@@ -60,7 +60,7 @@ pipeline {
                         $SCANNER_HOME/bin/sonar-scanner \
                         -Dsonar.projectKey=wave-project \
                         -Dsonar.host.url=$SONARQUBE_URL \
-                        -Dsonar.login=$SONARQUBE_TOKEN
+                        -Dsonar.login=$SONARQUBE_TOKEN  
                     '''
                 }
             }

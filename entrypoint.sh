@@ -1,8 +1,13 @@
 #!/bin/sh
 echo "Démarrage du conteneur..."
 
+# Charger les variables d'environnement du fichier .env
+if [ -f .env ]; then
+  export $(grep -v '^#' .env | xargs)
+fi
+
 # Attente que la base de données soit prête
-until mysql -h "db" -u "wave-user" -p"wave23" -e "SHOW DATABASES;" > /dev/null 2>&1; do
+until mysql -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" -e "SHOW DATABASES;" > /dev/null 2>&1; do
   echo "En attente que la base de données soit prête..."
   sleep 2
 done

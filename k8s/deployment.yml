@@ -1,3 +1,6 @@
+# ----------------------------------------
+# DEPLOYMENT : Laravel Application (wave-app)
+# ----------------------------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -14,7 +17,7 @@ spec:
     spec:
       containers:
         - name: wave-app
-          image: abdoulie/wave-image:latest
+          image: abdoulie/wave-image:v1.0.0  # ✅ Utilise une version fixe
           workingDir: /var/www/wave
           envFrom:
             - configMapRef:
@@ -24,6 +27,13 @@ spec:
               mountPath: /var/www/wave/storage
             - name: wave-cache
               mountPath: /var/www/wave/bootstrap/cache
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
       volumes:
         - name: wave-storage
           persistentVolumeClaim:
@@ -33,6 +43,10 @@ spec:
             claimName: wave-cache-pvc
 
 ---
+
+# ----------------------------------------
+# DEPLOYMENT : MySQL Database (wave-db)
+# ----------------------------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,7 +63,7 @@ spec:
     spec:
       containers:
         - name: wave-db
-          image: mysql:latest  # Utilisation de l'image MySQL officielle
+          image: mysql:8.0
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -74,13 +88,23 @@ spec:
           volumeMounts:
             - name: db-data
               mountPath: /var/lib/mysql
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
       volumes:
         - name: db-data
           persistentVolumeClaim:
-            claimName: db-data-pvc  
-
+            claimName: db-data-pvc
 
 ---
+
+# ----------------------------------------
+# DEPLOYMENT : Redis (wave-redis)
+# ----------------------------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -97,11 +121,22 @@ spec:
     spec:
       containers:
         - name: wave-redis
-          image: redis:latest
+          image: redis:7.2
           ports:
             - containerPort: 6379
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
 
 ---
+
+# ----------------------------------------
+# DEPLOYMENT : NGINX Web Server (wave-nginx)
+# ----------------------------------------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -118,7 +153,7 @@ spec:
     spec:
       containers:
         - name: wave-nginx
-          image: nginx:latest
+          image: nginx:1.25
           ports:
             - containerPort: 80
           volumeMounts:
@@ -127,6 +162,13 @@ spec:
               subPath: nginx.conf
             - name: wave-app-dir
               mountPath: /var/www/wave
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
       volumes:
         - name: nginx-config
           configMap:
